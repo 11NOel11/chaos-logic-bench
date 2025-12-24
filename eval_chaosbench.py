@@ -445,7 +445,7 @@ def extract_predicate_from_question(question: str) -> Optional[str]:
         (["positive lyapunov", "poslyap", "largest lyapunov exponent"], "PosLyap"),
         (["sensitive dependence", "sensitivity to initial conditions", "sensitive"], "Sensitive"),
         (["strange attractor"], "StrangeAttr"),
-        (["pointwise prediction", "point-wise prediction", "pointunpredictable", "long-term pointwise"], "PointUnpredictable"),
+        (["pointwise prediction", "point-wise prediction", "point-wise predictable", "pointunpredictable", "long-term pointwise"], "PointUnpredictable"),
         (["statistically predictable", "statistical prediction", "statpredictable"], "StatPredictable"),
         (["quasi-periodic", "quasiperiodic"], "QuasiPeriodic"),
         (["random", "randomness", "stochastic"], "Random"),
@@ -1176,8 +1176,13 @@ def compute_summary(results: List[EvalResult]) -> Dict[str, Any]:
     if violation_counts:
         summary["avg_violations_per_dialogue"] = sum(violation_counts) / len(violation_counts)
 
-        # Breakdown by violation count
-        violations_breakdown: Dict[str, int] = defaultdict(int)
+        # Breakdown by violation count (initialize all keys to 0 for consistency)
+        violations_breakdown: Dict[str, int] = {
+            "0_violations": 0,
+            "1_violation": 0,
+            "2_violations": 0,
+            "3+_violations": 0,
+        }
         for count in violation_counts:
             if count == 0:
                 violations_breakdown["0_violations"] += 1
@@ -1188,7 +1193,7 @@ def compute_summary(results: List[EvalResult]) -> Dict[str, Any]:
             else:
                 violations_breakdown["3+_violations"] += 1
 
-        summary["violations_breakdown"] = dict(violations_breakdown)
+        summary["violations_breakdown"] = violations_breakdown
 
         print(f"\n[FOL VIOLATIONS] Dialogue violation statistics:")
         print(f"  Avg violations per dialogue: {summary['avg_violations_per_dialogue']:.2f}")
