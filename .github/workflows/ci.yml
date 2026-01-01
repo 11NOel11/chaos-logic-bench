@@ -112,41 +112,41 @@ jobs:
 
       - name: Validate JSON format
         run: |
-          python -c "
-import json
-import sys
-from pathlib import Path
+          python << 'VALIDATE_JSON_EOF'
+          import json
+          import sys
+          from pathlib import Path
 
-batch_files = [
-    'data/batch1_atomic_implication.jsonl',
-    'data/batch2_multiHop_crossSystem.jsonl',
-    'data/batch3_pde_chem_bio.jsonl',
-    'data/batch4_maps_advanced.jsonl',
-    'data/batch5_counterfactual_high_difficulty.jsonl',
-    'data/batch6_deep_bias_probes.jsonl',
-    'data/batch7_multiturn_advanced.jsonl',
-]
+          batch_files = [
+              'data/batch1_atomic_implication.jsonl',
+              'data/batch2_multiHop_crossSystem.jsonl',
+              'data/batch3_pde_chem_bio.jsonl',
+              'data/batch4_maps_advanced.jsonl',
+              'data/batch5_counterfactual_high_difficulty.jsonl',
+              'data/batch6_deep_bias_probes.jsonl',
+              'data/batch7_multiturn_advanced.jsonl',
+          ]
 
-errors = []
-for batch_file in batch_files:
-    try:
-        with open(batch_file) as f:
-            for line_num, line in enumerate(f, 1):
-                if line.strip():
-                    json.loads(line)
-    except json.JSONDecodeError as e:
-        errors.append(f'{batch_file}:{line_num}: {e}')
-    except Exception as e:
-        errors.append(f'{batch_file}: {e}')
+          errors = []
+          for batch_file in batch_files:
+              try:
+                  with open(batch_file) as f:
+                      for line_num, line in enumerate(f, 1):
+                          if line.strip():
+                              json.loads(line)
+              except json.JSONDecodeError as e:
+                  errors.append(f'{batch_file}:{line_num}: {e}')
+              except Exception as e:
+                  errors.append(f'{batch_file}: {e}')
 
-if errors:
-    print('JSON validation errors:')
-    for error in errors:
-        print(f'  {error}')
-    sys.exit(1)
-else:
-    print('✓ All JSONL files are valid')
-"
+          if errors:
+              print('JSON validation errors:')
+              for error in errors:
+                  print(f'  {error}')
+              sys.exit(1)
+          else:
+              print('✓ All JSONL files are valid')
+          VALIDATE_JSON_EOF
 
       - name: Check systems directory
         run: |
@@ -156,3 +156,36 @@ else:
             exit 1
           fi
           echo "✓ Found 30 system definition files"
+
+      - name: Validate system JSON files
+        run: |
+          python << 'VALIDATE_SYSTEMS_EOF'
+          import json
+          import sys
+          from pathlib import Path
+
+          systems_dir = Path('systems')
+          errors = []
+
+          for system_file in systems_dir.glob('*.json'):
+              try:
+                  with open(system_file) as f:
+                      system_data = json.load(f)
+                  # Verify required fields
+                  if 'system_id' not in system_data:
+                      errors.append(f'{system_file}: Missing system_id field')
+                  if 'truth_assignment' not in system_data:
+                      errors.append(f'{system_file}: Missing truth_assignment field')
+              except json.JSONDecodeError as e:
+                  errors.append(f'{system_file}: JSON decode error - {e}')
+              except Exception as e:
+                  errors.append(f'{system_file}: {e}')
+
+          if errors:
+              print('System JSON validation errors:')
+              for error in errors:
+                  print(f'  {error}')
+              sys.exit(1)
+          else:
+              print('✓ All system JSON files are valid')
+          VALIDATE_SYSTEMS_EOF

@@ -18,9 +18,9 @@
 
 ## 📋 Abstract
 
-**ChaosBench-Logic** is a comprehensive benchmark designed to evaluate the reasoning capabilities of Large Language Models (LLMs) in the context of chaotic and non-chaotic dynamical systems. The benchmark tests models' abilities across multiple dimensions of complex reasoning: logical inference, symbolic manipulation, multi-hop reasoning, cross-system comparison, and counterfactual analysis. We evaluate **6 state-of-the-art LLMs** on **621 carefully curated questions** spanning **30 dynamical systems** from physics, chemistry, biology, and mathematics.
+**ChaosBench-Logic** is a comprehensive benchmark designed to evaluate the reasoning capabilities of Large Language Models (LLMs) in the context of chaotic and non-chaotic dynamical systems. The benchmark tests models' abilities across multiple dimensions of complex reasoning: logical inference, symbolic manipulation, multi-hop reasoning, cross-system comparison, and counterfactual analysis. We evaluate **multiple state-of-the-art LLMs** on **621 carefully curated questions** spanning **30 dynamical systems** (27 actively used, 3 reserved for extension) from physics, chemistry, biology, and mathematics.
 
-Our findings reveal that while modern LLMs achieve impressive accuracy (up to 91.6%), they exhibit varying strengths across different reasoning tasks, with notable challenges in compositional reasoning and certain types of logical implications.
+Our findings reveal that while modern LLMs achieve impressive accuracy (up to 94.0%), they exhibit varying strengths across different reasoning tasks, with notable challenges in compositional reasoning and certain types of logical implications.
 
 ---
 
@@ -54,10 +54,10 @@ See [**DATASET.md**](docs/DATASET.md) for complete schema documentation and [**O
 |---------|-------------|
 | **📊 621 Questions** | 17 task types across 7 high-level categories of reasoning complexity |
 | **🔬 27 Systems** | Lorenz-63, Brusselator, FitzHugh-Nagumo, logistic map, and more (30 defined) |
-| **🧠 6 LLMs** | GPT-4, Claude-3.5, Gemini-2.5, LLaMA-3 70B, Mixtral, OpenHermes |
+| **🧠 Multiple LLMs** | Evaluated: GPT-4, Claude-3.5, Gemini-2.5, LLaMA-3 70B • Supported: Mixtral, OpenHermes |
 | **🎲 11 Predicates** | Stability, chaos, bifurcations, periodicity, sensitivity, and more |
 | **🔄 2 Modes** | Zero-shot and chain-of-thought reasoning |
-| **📈 Rich Metrics** | Overall accuracy, dialogue accuracy, task-specific breakdowns, bias analysis |
+| **📈 Rich Metrics** | Overall accuracy, dialogue accuracy, task-specific breakdowns, FOL violations, bias analysis |
 
 </div>
 
@@ -69,26 +69,24 @@ See [**DATASET.md**](docs/DATASET.md) for complete schema documentation and [**O
 
 ### Performance Summary
 
-| Rank | Model | Mode | Overall Acc | Dialogue Acc | Throughput* | Valid |
-|:----:|-------|:----:|:-----------:|:------------:|:-----------:|:-----:|
-| 🥇 | **LLaMA-3 70B** | Zero-shot | **91.6%** | **75.5%** | 1.2 items/s | 620/621 |
-| 🥈 | **GPT-4** | CoT | **90.2%** | **73.7%** | ~10 items/s | 621/621 |
-| 🥉 | **GPT-4** | Zero-shot | **90.0%** | **72.8%** | ~15 items/s | 621/621 |
-| 4 | **LLaMA-3 70B** | CoT | **89.5%** | **65.3%** | 0.2 items/s | 620/621 |
-| 5 | **Claude-3.5** | Zero-shot | **88.2%** | **68.3%** | ~12 items/s | 621/621 |
-| 6 | **Gemini-2.5** | Zero-shot | **87.9%** | **67.6%** | ~18 items/s | 620/621 |
-
-*Throughput measured with 2 parallel workers (practical deployment scenario)
+| Rank | Model | Mode | Overall Acc | Dialogue Acc | Coverage |
+|:----:|-------|:----:|:-----------:|:------------:|:--------:|
+| 🥇 | **GPT-4** | Zero-shot | **94.0%** | **69.4%** | 620/621 |
+| 🥈 | **Gemini-2.5** | Zero-shot | **91.9%** | **71.4%** | 620/621 |
+| 🥈 | **Claude-3.5** | Zero-shot | **91.6%** | **67.3%** | 620/621 |
+| 🥈 | **LLaMA-3 70B** | Zero-shot | **91.6%** | **75.5%** | 620/621 |
+| 4 | **LLaMA-3 70B** | CoT | **89.5%** | **65.3%** | 620/621 |
+| 5 | **GPT-4** | CoT | **88.2%** | **53.1%** | 620/621 |
 
 </div>
 
 **Key Findings:**
-- 🏆 **LLaMA-3 70B** achieves highest overall accuracy and best dialogue consistency
-- ⚡ **Gemini-2.5** offers best speed-to-accuracy ratio
-- 🎯 **GPT-4** shows strong chain-of-thought reasoning capabilities
-- 📈 All models achieve >85% accuracy, demonstrating strong logical reasoning capabilities
+- 🏆 **GPT-4 Zero-shot** achieves highest overall accuracy (94.0%)
+- 💬 **LLaMA-3 70B Zero-shot** shows best dialogue consistency (75.5%)
+- 🎯 Multiple models achieve >91% accuracy, demonstrating strong logical reasoning capabilities
+- ⚠️ Chain-of-thought prompting shows mixed results (improved for LLaMA-3, degraded for GPT-4)
 
-> **Note:** LLaMA-3 70B requires longer inference time (~8 min for zero-shot, ~55 min for CoT) compared to other models (~2-5 min per run).
+> **Note:** Throughput and timing metrics are environment-dependent and not reported. Worker counts varied by model (2-8 workers). See `results/*/run_meta.json` for deployment configuration details.
 
 See [**RESULTS.md**](docs/RESULTS.md) for comprehensive analysis and task-specific breakdowns.
 
@@ -290,33 +288,43 @@ ChaosBench-Logic/
 
 ## 🧪 Benchmark Design
 
-### Task Categories
+### Task Type Distribution
 
 <div align="center">
 
-| Category | Questions | Description |
-|----------|:---------:|-------------|
-| **Atomic Facts** | 109 | Basic properties: stability, chaos, dimension, periodicity |
-| **Implications** | 93 | Logical consequences: if A then B |
-| **Multi-hop Reasoning** | 98 | Chained logical inference across multiple facts |
-| **Cross-system Comparison** | 87 | Relative properties between different systems |
-| **PDE/Chem/Bio** | 76 | Domain-specific technical reasoning |
-| **Counterfactual** | 68 | "What if" scenarios with parameter modifications |
-| **Multi-turn Dialogue** | 90 | Contextual Q&A sequences |
-| **Total** | **621** | Comprehensive reasoning evaluation |
+| Task Type | Count | Description |
+|-----------|:-----:|-------------|
+| **multi_turn** | 213 | Contextual Q&A sequences (49 dialogues, avg 4.1 turns) |
+| **bias** | 114 | Common misconceptions about chaos and dynamical systems |
+| **atomic** | 76 | Basic properties: stability, chaos, dimension, periodicity |
+| **counterfactual** | 76 | "What if" scenarios with parameter modifications |
+| **hard** | 35 | Domain-specific technical reasoning (PDEs, chemistry, biology) |
+| **multi_hop** | 34 | Chained logical inference across multiple facts |
+| **cross_system** | 26 | Relative properties between different systems |
+| **Other (11 types)** | 47 | implication, cf, cf_chain, validity, analogy, adversarial, trap, structural, fallacy, compositional |
+| **Total** | **621** | 17 distinct task types across 7 high-level reasoning categories |
 
 </div>
 
+See [**DATASET.md**](docs/DATASET.md) for complete task type breakdown and statistics.
+
 ### Dynamical Systems Coverage
 
-Our benchmark spans diverse systems across multiple domains:
+**27 systems actively used in dataset:**
 
-- **Classical Chaos**: Lorenz-63, Rössler, double pendulum, Duffing oscillator
+- **Classical Chaos**: Lorenz-63, Lorenz-84, Lorenz-96, Rössler, Duffing (chaotic), Chen system
 - **Chemical Systems**: Brusselator, Oregonator
-- **Biological Models**: FitzHugh-Nagumo, Hindmarsh-Rose, Lotka-Volterra
-- **Maps**: Logistic map, Hénon map, standard map, Arnold cat map, baker's map
-- **PDEs**: Kuramoto-Sivashinsky, sine-Gordon
-- **Others**: Van der Pol, Chua circuit, Mackey-Glass, Lorenz-96
+- **Biological Models**: FitzHugh-Nagumo, Hindmarsh-Rose, Lotka-Volterra, Mackey-Glass
+- **Maps**: Logistic (r=4.0, r=2.8), Hénon, Ikeda, Standard, Arnold cat, Baker's, Circle (quasiperiodic)
+- **PDEs**: Kuramoto-Sivashinsky, Sine-Gordon
+- **Neural Models**: Rikitake dynamo
+- **Oscillators**: Van der Pol (vdp), Simple harmonic (shm), Damped driven pendulum (non-chaotic)
+- **Stochastic**: Ornstein-Uhlenbeck process
+
+**3 systems defined but reserved for extension:**
+- Chua circuit, Damped oscillator, Double pendulum
+
+See [**DATASET.md**](docs/DATASET.md) for system usage statistics and [**ONTOLOGY.md**](docs/ONTOLOGY.md) for complete system definitions.
 
 ### Evaluation Metrics
 
@@ -334,18 +342,28 @@ Results are exported in **JSON**, **CSV**, and **PNG** formats for downstream an
 
 ## 🔬 Supported Models
 
+The codebase supports the following LLM providers via API:
+
 <div align="center">
 
-| Model | Provider | Version | Speed | Cost/Run | Notes |
-|-------|----------|---------|-------|----------|-------|
-| GPT-4 | OpenAI | gpt-4-turbo | ⚡⚡⚡ | ~$2.00 | Fast, accurate |
-| Claude-3.5 | Anthropic | claude-3-5-sonnet | ⚡⚡⚡ | ~$1.30 | Strong reasoning |
-| Gemini-2.5 | Google | gemini-2.5-flash | ⚡⚡⚡⚡ | ~$0.50 | Fastest, cost-effective |
-| LLaMA-3 70B | HuggingFace | Meta-Llama-3-70B | ⚡ | ~$6.00 | Best accuracy, slower |
-| Mixtral | HuggingFace | Mixtral-8x7B | ⚡⚡ | ~$2.00 | Medium speed |
-| OpenHermes | HuggingFace | OpenHermes-2.5 | ⚡⚡ | ~$1.30 | Medium speed |
+| Model ID | Provider | API Model Name | Evaluated |
+|----------|----------|----------------|:---------:|
+| `gpt4` | OpenAI | gpt-4-turbo | ✅ Yes |
+| `claude3` | Anthropic | claude-3-5-sonnet-20241022 | ✅ Yes |
+| `gemini` | Google | gemini-2.5-flash-preview-0514 | ✅ Yes |
+| `llama3` | HuggingFace | Meta-Llama-3-70B-Instruct | ✅ Yes |
+| `mixtral` | HuggingFace | Mixtral-8x7B-Instruct-v0.1 | ⚠️ Code only |
+| `openhermes` | HuggingFace | teknium/OpenHermes-2.5-Mistral-7B | ⚠️ Code only |
 
 </div>
+
+**Notes:**
+- ✅ **Evaluated**: Results available in `results/` directory
+- ⚠️ **Code only**: Client implementation exists but no evaluation results included
+- **Speed/Cost**: Environment-dependent; not reported to avoid misleading comparisons
+- **Workers**: Configured per model (2-8 workers) based on rate limits
+
+To add new models, see [**CONTRIBUTING.md**](docs/CONTRIBUTING.md#adding-new-models).
 
 ---
 
@@ -354,10 +372,10 @@ Results are exported in **JSON**, **CSV**, and **PNG** formats for downstream an
 If you use ChaosBench-Logic in your research, please cite:
 
 ```bibtex
-@software{chaosbench2024,
+@software{chaosbench2025,
   title={ChaosBench-Logic: A Benchmark for Evaluating Large Language Models on Complex Reasoning about Dynamical Systems},
   author={Thomas, Noel},
-  year={2024},
+  year={2025},
   url={https://github.com/11NOel11/ChaosBench-Logic},
   institution={Mohamed bin Zayed University of Artificial Intelligence}
 }
@@ -412,9 +430,9 @@ Reduce parallel workers: `python run_benchmark.py --model llama3 --mode zeroshot
 </details>
 
 <details>
-<summary><b>Why is LLaMA-3 so slow?</b></summary>
+<summary><b>Performance and timing?</b></summary>
 
-LLaMA-3 70B has longer inference latency (~8-55 min vs 2-5 min for other models). This is expected for the model size and HuggingFace inference API. The accuracy gains may justify the tradeoff for research purposes.
+Execution timing is environment-dependent and varies based on API provider, network conditions, and worker count. We do not report timing metrics to avoid misleading comparisons. Worker configuration details are available in `results/*/run_meta.json`.
 </details>
 
 <details>

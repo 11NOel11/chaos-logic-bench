@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-Successfully evaluated **6 model configurations** on the ChaosBench-Logic benchmark (621 questions across 7 task types). LLaMA-3 70B was successfully integrated and evaluated after fixing API compatibility issues.
+Successfully evaluated **6 model configurations** on the ChaosBench-Logic benchmark (621 questions across 17 task types). Results include GPT-4, Claude-3.5, Gemini-2.5, and LLaMA-3 70B in both zero-shot and chain-of-thought modes.
 
 ---
 
@@ -10,23 +10,23 @@ Successfully evaluated **6 model configurations** on the ChaosBench-Logic benchm
 
 ### Model Performance Rankings
 
-| Rank | Model | Mode | Overall Accuracy | Dialogue Accuracy | Time (min) |
-|------|-------|------|------------------|-------------------|------------|
-| 🥇 1 | **GPT-4** | Zeroshot | **94.0%** | 69.4% | ~10 |
-| 🥈 2 | **Gemini-2.5 Flash** | Zeroshot | **91.9%** | 71.4% | ~8 |
-| 🥉 3 | **Claude-3.5 Sonnet** | Zeroshot | **91.6%** | 67.3% | ~12 |
-| 🥉 3 | **LLaMA-3 70B** | Zeroshot | **91.6%** | **75.5%** | ~8.6 |
-| 5 | **LLaMA-3 70B** | CoT | **89.5%** | 65.3% | ~55 |
-| 6 | **GPT-4** | CoT | **88.2%** | 53.1% | ~30 |
+| Rank | Model | Mode | Overall Accuracy | Dialogue Accuracy | Coverage |
+|------|-------|------|------------------|-------------------|----------|
+| 🥇 1 | **GPT-4** | Zeroshot | **94.0%** | 69.4% | 620/621 |
+| 🥈 2 | **Gemini-2.5 Flash** | Zeroshot | **91.9%** | 71.4% | 620/621 |
+| 🥉 3 | **Claude-3.5 Sonnet** | Zeroshot | **91.6%** | 67.3% | 620/621 |
+| 🥉 3 | **LLaMA-3 70B** | Zeroshot | **91.6%** | **75.5%** | 620/621 |
+| 5 | **LLaMA-3 70B** | CoT | **89.5%** | 65.3% | 620/621 |
+| 6 | **GPT-4** | CoT | **88.2%** | 53.1% | 620/621 |
+
+**Note:** Execution timing is environment-dependent and not reported. Worker counts: GPT-4 (5), Claude-3.5 (4), Gemini (8), LLaMA-3 (2).
 
 ### Key Findings
 
-✅ **LLaMA-3 Performance:**
-- **Zeroshot: 91.6%** - Tied for 3rd place with Claude-3.5
-- **CoT: 89.5%** - Strong performance, 2nd best in CoT mode
-- **Best Dialogue Accuracy (75.5%)** - Excels at multi-turn consistency
-- **99.8% Response Rate** - Only 1 failed item out of 621
-- **Execution time** - 8.6 min for zeroshot, 55 min for CoT (with 2 parallel workers)
+✅ **Top Performance:**
+- **GPT-4 Zeroshot: 94.0%** - Highest overall accuracy
+- **LLaMA-3 Zeroshot: 75.5% dialogue accuracy** - Best multi-turn consistency
+- **Coverage: 620/621** - All models evaluated on same question set (1 item has no gold label)
 
 🎯 **Notable Achievements:**
 - LLaMA-3 has the **highest dialogue accuracy** across all models
