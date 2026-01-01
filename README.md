@@ -99,22 +99,25 @@ See [**RESULTS.md**](docs/RESULTS.md) for comprehensive analysis and task-specif
 We recommend using **[uv](https://docs.astral.sh/uv/)** (a fast Rust-based Python package manager):
 
 ```bash
-# Install uv
+# Install uv (macOS/Linux)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Clone repository
 git clone https://github.com/11NOel11/ChaosBench-Logic.git
 cd ChaosBench-Logic
 
-# Setup environment with uv (creates virtualenv and installs dependencies)
+# Create virtual environment
 uv venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
-uv pip install -e .
 
-# Install dev dependencies (pytest, etc.)
-uv pip install -r requirements.txt
-uv pip install --group dev
+# Install runtime dependencies from pyproject.toml
+uv sync
+
+# For development (includes pytest, pytest-cov):
+uv sync --all-groups
 ```
+
+**Why uv?** ~10-100x faster than pip, automatic virtualenv management, lockfile support (uv.lock), and respects pyproject.toml dependency groups.
 
 <details>
 <summary><b>Alternative: Using pip or conda</b></summary>
@@ -169,22 +172,23 @@ ChaosBench-Logic includes a comprehensive pytest test suite with **122 test case
 ### Running Tests
 
 ```bash
-# Install pytest (in virtual environment)
-source .venv/bin/activate
-pip install pytest
+# Ensure dev dependencies are installed
+uv sync --all-groups
 
 # Run all tests
-pytest
+uv run pytest
 
 # Run with verbose output
-pytest -v
+uv run pytest -v
 
 # Run specific test file
-pytest tests/test_normalization.py -v
+uv run pytest tests/test_normalization.py -v
 
 # Run with coverage report
-pytest --cov=eval_chaosbench --cov-report=html
+uv run pytest --cov=eval_chaosbench --cov-report=html
 ```
+
+**Note:** Using `uv run` automatically activates the virtualenv and runs the command, so you don't need to manually activate.
 
 ### Test Coverage
 

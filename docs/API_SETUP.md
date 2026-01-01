@@ -4,7 +4,10 @@ This guide explains how to obtain and configure API keys for ChaosBench-Logic.
 
 ## Required API Keys
 
-ChaosBench-Logic supports 6 LLM models across 4 providers. You only need keys for the models you want to test.
+ChaosBench-Logic supports multiple LLM models across 4 providers. You only need keys for the models you want to test.
+
+**Models with published results:** GPT-4, Claude-3.5, Gemini-2.5, LLaMA-3 70B
+**Additional supported models (code only):** Mixtral, OpenHermes
 
 | Provider | Models | Required For |
 |----------|--------|--------------|
@@ -38,7 +41,7 @@ This creates a `.env` file that will store your API keys. **Never commit this fi
    OPENAI_API_KEY=sk-your-actual-key-here
    ```
 
-**Cost**: ~$0.50-2.00 per full benchmark run (621 items)
+**Cost**: Variable (depends on API pricing, prompt length, and model version)
 
 #### Anthropic (Claude-3.5)
 
@@ -51,7 +54,7 @@ This creates a `.env` file that will store your API keys. **Never commit this fi
    ANTHROPIC_API_KEY=sk-ant-your-actual-key-here
    ```
 
-**Cost**: ~$0.30-1.50 per full benchmark run
+**Cost**: Variable (depends on API pricing)
 
 #### Google (Gemini-2.5)
 
@@ -64,7 +67,7 @@ This creates a `.env` file that will store your API keys. **Never commit this fi
    GOOGLE_API_KEY=your-actual-key-here
    ```
 
-**Cost**: Free tier available, ~$0.10-0.50 per run
+**Cost**: Free tier available (check Google AI Studio for current limits)
 
 #### HuggingFace (LLaMA-3, Mixtral, OpenHermes)
 
@@ -78,10 +81,10 @@ This creates a `.env` file that will store your API keys. **Never commit this fi
    HF_API_KEY=hf_your-actual-key-here
    ```
 
-**Important**: 
+**Important**:
 - HuggingFace requires **credits** for inference API
 - Free tier: Limited requests
-- LLaMA-3 70B is **slow and expensive** (~$2-5 per run)
+- LLaMA-3 70B requires significant credits (check current pricing)
 - Add credits at: https://huggingface.co/settings/billing
 
 ---
@@ -185,20 +188,25 @@ cat .env  # Check file contents
 
 ---
 
-## Cost Estimates
+## Cost Considerations
 
-Full benchmark (621 items) estimated costs:
+API costs for running the full benchmark (621 items) vary significantly based on:
+- **Current API pricing** (changes frequently - check provider websites)
+- **Prompt mode** (chain-of-thought generates longer outputs than zero-shot)
+- **Model version** (different versions have different pricing tiers)
+- **Worker configuration** (parallel workers may hit rate limits, increasing retries)
 
-| Model | Zeroshot | Chain-of-Thought | Total (both) |
-|-------|----------|------------------|--------------|
-| GPT-4 | $0.50 | $1.50 | $2.00 |
-| Claude-3.5 | $0.30 | $1.00 | $1.30 |
-| Gemini-2.5 | $0.10 | $0.40 | $0.50 |
-| LLaMA-3 70B | $2.00 | $4.00 | $6.00 |
-| Mixtral | $0.50 | $1.50 | $2.00 |
-| OpenHermes | $0.30 | $1.00 | $1.30 |
+**Estimation approach:**
+1. Check current pricing at provider dashboards
+2. Estimate ~100-200 tokens input per question (varies by prompt mode)
+3. Estimate ~50-500 tokens output (zeroshot: ~50, CoT: ~200-500)
+4. Multiply by 621 questions
 
-**Total for all models**: ~$12-15
+**Cost-saving tips:**
+- Start with free tiers (Gemini) or cheaper models
+- Run zeroshot first (faster, cheaper) before CoT
+- Use `--workers 2` for expensive models to avoid rate limit retries
+- Monitor API dashboards during evaluation
 
 ---
 

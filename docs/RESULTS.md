@@ -94,6 +94,129 @@ Successfully evaluated **6 model configurations** on the ChaosBench-Logic benchm
 
 ---
 
+## 📊 Metrics Glossary
+
+Understanding the evaluation metrics used in this benchmark:
+
+### Overall Accuracy
+
+**Definition:** Fraction of questions where the model's normalized prediction matches the ground truth label.
+
+**Computation:**
+```python
+overall_accuracy = correct_predictions / total_evaluated
+```
+
+where `total_evaluated` excludes items with no gold label (1 item in the dataset).
+
+**Range:** 0.0 to 1.0 (reported as percentage: 0% to 100%)
+
+**What it measures:** The model's ability to correctly answer individual questions across all task types.
+
+---
+
+### Dialogue Accuracy
+
+**Definition:** Fraction of multi-turn dialogues where **all turns** are answered correctly.
+
+**Computation:**
+```python
+# For each dialogue (d001, d002, ..., d049):
+dialogue_correct = all(turn.prediction == turn.ground_truth for turn in dialogue)
+
+dialogue_accuracy = count(dialogue_correct) / total_dialogues
+```
+
+**Range:** 0.0 to 1.0 (reported as percentage)
+
+**What it measures:** The model's ability to maintain consistency across multi-turn conversations. A dialogue is only counted as correct if **every single turn** is correct.
+
+**Why it's harder:** This metric is typically much lower than overall accuracy because a single mistake in any turn causes the entire dialogue to be marked as incorrect.
+
+**Example:** A 4-turn dialogue requires 4 consecutive correct answers. Overall accuracy might be 90%, but dialogue accuracy could be (0.9)^4 = 65.6% for 4-turn dialogues.
+
+---
+
+### Coverage
+
+**Definition:** Number of questions successfully evaluated divided by total questions in the dataset.
+
+**Computation:**
+```python
+coverage = num_items_evaluated / num_items_total
+```
+
+**Typical value:** 620/621 for all models
+
+**Why not 621/621:** One question in the dataset lacks a ground truth label (intentional design for testing edge cases), so it's excluded from evaluation.
+
+**What it measures:** API reliability and response success rate. Low coverage indicates API failures or unparseable responses.
+
+---
+
+### Contradiction Rate
+
+**Definition:** Fraction of dialogues containing at least one **self-contradiction** (model gives conflicting answers to the same question within a dialogue).
+
+**Computation:**
+```python
+# For each dialogue:
+has_contradiction = any(
+    model answered same question differently in different turns
+)
+
+contradiction_rate = count(has_contradiction) / total_dialogues
+```
+
+**Range:** 0.0 to 1.0 (reported as percentage)
+
+**What it measures:** Internal consistency. **Higher is worse** (unlike accuracy metrics).
+
+**Example:** If a model says "YES, the Lorenz system is chaotic" in turn 1, then "NO, it is not chaotic" in turn 3 (when asked the same question again), that's a contradiction.
+
+---
+
+### Avg FOL Violations Per Item
+
+**Definition:** Average number of First-Order Logic (FOL) axiom violations per question.
+
+**Computation:**
+```python
+# For each question about a system's predicates:
+violations = count(
+    model predictions that violate requires/excludes rules
+)
+
+avg_fol_violations = total_violations / total_items
+```
+
+**Example violation:**
+- Model predicts: `Chaotic = YES, Deterministic = NO`
+- Axiom: `Chaotic → Deterministic` (chaos requires determinism)
+- This is 1 FOL violation
+
+**Range:** 0.0 to N (where N = max possible violations per item, typically ~11)
+
+**What it measures:** Logical consistency with formal axioms defined in [ONTOLOGY.md](ONTOLOGY.md). **Lower is better** (0.0 = perfect logical consistency).
+
+**Current results:** All evaluated models achieve 0.000 avg FOL violations, indicating strong adherence to logical axioms.
+
+---
+
+### How Metrics Are Computed
+
+All metrics are computed by `eval_chaosbench.py` and stored in `results/*/summary.json`:
+
+1. **Answer normalization:** `normalize_label()` extracts YES/NO from model responses using an 8-step cascade (handles various formats)
+2. **Comparison:** Normalized prediction vs ground truth label
+3. **Aggregation:** Compute per-item, per-task, per-dialogue statistics
+4. **FOL checking:** Extract predicates from questions, check against axioms
+5. **Output:** JSON files with all metrics
+
+See `eval_chaosbench.py` for implementation details.
+
+---
+
 ## 🔬 Comparison Across All Models
 
 ### Overall Accuracy Comparison
@@ -257,6 +380,74 @@ Each model directory contains:
 3. `run_single_model.py` - Run one model
 4. `run_all_models_fast.py` - Run all models with parallelization
 5. `run_llama.py` - Dedicated LLaMA-3 runner
+
+---
+
+## 🚀 How to Add New Results
+
+To add evaluation results for a new model or configuration:
+
+### 1. Run Evaluation
+
+```bash
+# Run your model evaluation
+python run_benchmark.py --model yourmodel --mode zeroshot
+
+# This creates: results/yourmodel_zeroshot/
+```
+
+### 2. Verify Output Files
+
+Ensure your results directory contains:
+- `summary.json` - Overall metrics (required)
+- `run_meta.json` - Execution metadata (required)
+- `per_item_results.jsonl` - Individual predictions (optional)
+- `accuracy_by_task.csv` - Task-level breakdown (optional)
+
+### 3. Check `summary.json` Format
+
+Required fields:
+```json
+{
+  "overall_accuracy": 0.92,
+  "dialogue_accuracy": 0.68,
+  "contradiction_rate": 0.89,
+  "avg_fol_violations_per_item": 0.0,
+  "num_correct": 571,
+  "num_total": 620
+}
+```
+
+### 4. Check `run_meta.json` Format
+
+Required fields:
+```json
+{
+  "model_name": "yourmodel",
+  "mode": "zeroshot",
+  "num_items_total": 621,
+  "num_items_evaluated": 620,
+  "num_items_unanswered": 0,
+  "num_items_no_gold": 1,
+  "max_workers": 4
+}
+```
+
+### 5. Update This Document
+
+Add your model to:
+- "Overall Results" table (lines 13-20)
+- "Comparison Across All Models" section (lines 220-240)
+- "Available Results" list (lines 350-360)
+
+### 6. Optional: Run Aggregation Script
+
+If you have multiple new results, use:
+```bash
+python scripts/aggregate_results.py
+```
+
+This will automatically generate updated tables and statistics.
 
 ---
 

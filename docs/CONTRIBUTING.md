@@ -43,8 +43,11 @@ cd ChaosBench-Logic
 uv venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-# Install dependencies from pyproject.toml
-uv pip install -e .
+# Install runtime dependencies from pyproject.toml
+uv sync
+
+# For development (includes pytest, pytest-cov):
+uv sync --all-groups
 ```
 
 **💡 Quick uv Commands:**
@@ -173,25 +176,30 @@ python run_benchmark.py --model mixtral --mode zeroshot --debug
 
 ### Supported Models
 
-| Model | ID | Provider | Notes |
-|-------|-----|----------|-------|
-| GPT-4 | `gpt4` | OpenAI | Fast, 5 workers |
-| Claude-3.5 | `claude3` | Anthropic | 4 workers |
-| Gemini-2.5 | `gemini` | Google | Fast, 8 workers |
-| LLaMA-3 70B | `llama3` | HuggingFace | **Slow**, use 2 workers |
-| Mixtral | `mixtral` | HuggingFace | Medium speed |
-| OpenHermes | `openhermes` | HuggingFace | Medium speed |
+| Model | ID | Provider | Recommended Workers |
+|-------|-----|----------|-------------------|
+| GPT-4 | `gpt4` | OpenAI | 4-5 |
+| Claude-3.5 | `claude3` | Anthropic | 4 |
+| Gemini-2.5 | `gemini` | Google | 6-8 |
+| LLaMA-3 70B | `llama3` | HuggingFace | 2 (rate limits) |
+| Mixtral | `mixtral` | HuggingFace | 2-4 |
+| OpenHermes | `openhermes` | HuggingFace | 2-4 |
 
 ### Performance Notes
 
-⚠️ **LLaMA-3 is significantly slower than other models:**
-- **Zeroshot**: ~8-10 minutes for 621 items (1.2 items/second)
-- **Chain-of-Thought**: ~55-60 minutes for 621 items (0.2 items/second)
-- Recommended workers: `--workers 2` (more may cause rate limits)
+⚠️ **Performance varies significantly across models and depends on:**
+- API provider infrastructure and current load
+- Network latency and connectivity
+- Worker configuration (`--workers` parameter)
+- Prompt mode (CoT generates longer responses than zeroshot)
+- Rate limiting and retry logic
 
-For comparison:
-- GPT-4, Claude-3.5, Gemini: 2-5 minutes per run
-- Mixtral, OpenHermes: 5-10 minutes per run
+**Recommendations for stable evaluation:**
+- **LLaMA-3 70B**: Use `--workers 2` (higher counts may hit rate limits)
+- **GPT-4, Claude-3.5, Gemini**: Can use higher worker counts (4-8)
+- **Mixtral, OpenHermes**: Start with `--workers 2-4`
+
+**Timing is environment-dependent** and not reported in published results to avoid misleading comparisons across different infrastructure setups.
 
 ---
 
