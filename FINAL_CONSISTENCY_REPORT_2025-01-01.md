@@ -242,7 +242,7 @@ Repository = "https://github.com/11NOel11/ChaosBench-Logic"
 **Status:**
 - ✅ Author: Noel Thomas
 - ✅ URLs: All point to 11NOel11/ChaosBench-Logic
-- ✅ No placeholder URLs (yourusername)
+- ✅ No placeholder URLs in metadata files
 
 ---
 
@@ -364,7 +364,7 @@ All claims validated successfully!
 ### Metadata Quality
 - ✅ CITATION.cff: Noel Thomas, 2025, correct URL
 - ✅ pyproject.toml: Noel Thomas, correct URLs
-- ✅ No placeholder URLs (yourusername)
+- ✅ No placeholder URLs in metadata files
 - ✅ No "ChaosBench Team" references
 
 ---
