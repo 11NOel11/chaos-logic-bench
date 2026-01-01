@@ -85,14 +85,51 @@ def compute_stats():
     }
 
 
+def validate_published_results():
+    """Validate that published_results exists and has expected structure."""
+
+    published_dir = Path("published_results")
+    errors = []
+
+    if not published_dir.exists():
+        errors.append("published_results/ directory not found")
+        return errors
+
+    # Expected configurations
+    expected_configs = [
+        "claude3_zeroshot",
+        "gemini_zeroshot",
+        "gpt4_cot",
+        "gpt4_zeroshot",
+        "llama3_cot",
+        "llama3_zeroshot",
+    ]
+
+    # Required files per configuration
+    required_files = ["summary.json", "run_meta.json", "accuracy_by_task.csv", "metrics_overview.csv"]
+
+    for config in expected_configs:
+        config_dir = published_dir / config
+        if not config_dir.exists():
+            errors.append(f"Missing published_results/{config}/")
+            continue
+
+        for filename in required_files:
+            filepath = config_dir / filename
+            if not filepath.exists():
+                errors.append(f"Missing published_results/{config}/{filename}")
+
+    return errors
+
+
 def validate_claims():
     """Validate repo claims against actual statistics."""
-    
+
     stats = compute_stats()
-    
+
     print("Validating ChaosBench-Logic repository claims...")
     print()
-    
+
     errors = []
     
     # Check 1: Total items
@@ -136,9 +173,18 @@ def validate_claims():
         errors.append(f"Predicates mismatch: expected 11, got {stats['num_predicates']}")
     elif stats['num_predicates']:
         print(f"✓ Predicates per system: {stats['num_predicates']}")
-    
+
+    # Check 8: Published results structure
     print()
-    
+    print("Validating published_results/ structure...")
+    results_errors = validate_published_results()
+    if results_errors:
+        errors.extend(results_errors)
+    else:
+        print("✓ Published results structure validated")
+
+    print()
+
     if errors:
         print("VALIDATION FAILED:")
         for error in errors:

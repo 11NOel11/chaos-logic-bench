@@ -1,0 +1,3 @@
+model,mode,overall_accuracy,dialogue_accuracy,contradiction_rate
+gemini,zeroshot,,0.0,0.0
+gemini,zeroshot,0.9193548387096774,0.7142857142857143,0.9183673469387755

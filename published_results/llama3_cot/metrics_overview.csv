@@ -1,0 +1,2 @@
+model,mode,overall_accuracy,dialogue_accuracy,contradiction_rate
+llama3,cot,0.8951612903225806,0.6530612244897959,0.8979591836734694

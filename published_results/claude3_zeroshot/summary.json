@@ -1,0 +1,25 @@
+{
+  "overall_accuracy": 0.9161290322580645,
+  "task_accuracy": {
+    "atomic": 0.8552631578947368,
+    "implication": 0.8333333333333334,
+    "bias": 0.9736842105263158,
+    "counterfactual": 0.9605263157894737,
+    "multi_turn": 0.8967136150234741,
+    "compositional": 0.0,
+    "adversarial": 1.0,
+    "multi_hop": 0.9411764705882353,
+    "trap": 0.6666666666666666,
+    "analogy": 1.0,
+    "fallacy": 1.0,
+    "structural": 0.5,
+    "cf": 0.9375,
+    "cross_system": 0.8846153846153846,
+    "cf_chain": 1.0,
+    "validity": 0.8,
+    "hard": 0.9428571428571428
+  },
+  "bias_error": {},
+  "dialogue_accuracy": 0.673469387755102,
+  "contradiction_rate": 0.9183673469387755
+}

@@ -1,0 +1,2 @@
+model,mode,overall_accuracy,dialogue_accuracy,contradiction_rate
+llama3,zeroshot,0.9161290322580645,0.7551020408163265,0.8979591836734694

@@ -86,7 +86,7 @@ See [**DATASET.md**](docs/DATASET.md) for complete schema documentation and [**O
 - 🎯 Multiple models achieve >91% accuracy, demonstrating strong logical reasoning capabilities
 - ⚠️ Chain-of-thought prompting shows mixed results (degraded for both GPT-4 and LLaMA-3)
 
-> **Note:** Throughput and timing metrics are environment-dependent and not reported. Worker counts varied by model (2-8 workers). See `results/*/run_meta.json` for deployment configuration details.
+> **Note:** Throughput and timing metrics are environment-dependent and not reported. Worker counts varied by model (2-8 workers). See `published_results/*/run_meta.json` for deployment configuration details.
 
 See [**RESULTS.md**](docs/RESULTS.md) for comprehensive analysis and task-specific breakdowns.
 
@@ -270,7 +270,7 @@ ChaosBench-Logic/
 │   ├── test_fol_rules.py      # FOL violation tests (46)
 │   ├── test_summary_metrics.py # Metrics computation tests (21)
 │   └── test_integration_smoke.py # Integration tests (7)
-├── 📁 results/                # Evaluation outputs (auto-generated)
+├── 📁 published_results/      # Published evaluation artifacts (tracked)
 ├── 📁 docs/                   # Documentation
 │   ├── DATASET.md             # Dataset card and schema
 │   ├── ONTOLOGY.md            # Predicate definitions and FOL axioms
@@ -286,6 +286,26 @@ ChaosBench-Logic/
 ├── 📄 pyproject.toml          # Package configuration
 ├── 📄 LICENSE                 # MIT License (code)
 └── 📄 LICENSE_DATA            # CC BY 4.0 (dataset)
+```
+
+### Published Results
+
+The `published_results/` directory contains **minimal, verifiable artifacts** used to generate the results tables:
+
+- `summary.json` - Overall accuracy and per-task-type breakdown
+- `run_meta.json` - Run configuration metadata
+- `accuracy_by_task.csv` - Task-type accuracy table
+- `metrics_overview.csv` - Summary metrics
+
+**What's NOT included:** Raw model completions, debug logs, and checkpoint files are intentionally excluded to keep the repository lightweight (see `published_results/README.md` for details).
+
+**To verify results:**
+```bash
+# View summary for any configuration
+cat published_results/gpt4_zeroshot/summary.json | python3 -m json.tool
+
+# Aggregate all results into markdown table
+python scripts/aggregate_results.py
 ```
 
 ---
@@ -362,7 +382,7 @@ The codebase supports the following LLM providers via API:
 </div>
 
 **Notes:**
-- ✅ **Evaluated**: Results available in `results/` directory
+- ✅ **Evaluated**: Results available in `published_results/` directory
 - ⚠️ **Code only**: Client implementation exists but no evaluation results included
 - **Speed/Cost**: Environment-dependent; not reported to avoid misleading comparisons
 - **Workers**: Configured per model (2-8 workers) based on rate limits
@@ -436,7 +456,7 @@ Reduce parallel workers: `python run_benchmark.py --model llama3 --mode zeroshot
 <details>
 <summary><b>Performance and timing?</b></summary>
 
-Execution timing is environment-dependent and varies based on API provider, network conditions, and worker count. We do not report timing metrics to avoid misleading comparisons. Worker configuration details are available in `results/*/run_meta.json`.
+Execution timing is environment-dependent and varies based on API provider, network conditions, and worker count. We do not report timing metrics to avoid misleading comparisons. Worker configuration details are available in `published_results/*/run_meta.json`.
 </details>
 
 <details>

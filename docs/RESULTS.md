@@ -205,7 +205,7 @@ avg_fol_violations = total_violations / total_items
 
 ### How Metrics Are Computed
 
-All metrics are computed by `eval_chaosbench.py` and stored in `results/*/summary.json`:
+All metrics are computed by `eval_chaosbench.py` and stored in `published_results/*/summary.json`:
 
 1. **Answer normalization:** `normalize_label()` extracts YES/NO from model responses using an 8-step cascade (handles various formats)
 2. **Comparison:** Normalized prediction vs ground truth label
@@ -380,19 +380,24 @@ To add evaluation results for a new model or configuration:
 ### 1. Run Evaluation
 
 ```bash
-# Run your model evaluation
+# Run your model evaluation (outputs to results/ locally)
 python run_benchmark.py --model yourmodel --mode zeroshot
 
-# This creates: results/yourmodel_zeroshot/
+# Copy minimal artifacts to published_results for tracking
+mkdir -p published_results/yourmodel_zeroshot
+cp results/yourmodel_zeroshot/{summary.json,run_meta.json,accuracy_by_task.csv,metrics_overview.csv} \
+   published_results/yourmodel_zeroshot/
 ```
 
 ### 2. Verify Output Files
 
-Ensure your results directory contains:
+Ensure your `published_results/yourmodel_zeroshot/` directory contains:
 - `summary.json` - Overall metrics (required)
 - `run_meta.json` - Execution metadata (required)
-- `per_item_results.jsonl` - Individual predictions (optional)
-- `accuracy_by_task.csv` - Task-level breakdown (optional)
+- `accuracy_by_task.csv` - Task-level breakdown (required)
+- `metrics_overview.csv` - Summary metrics table (required)
+
+**Note:** Raw model outputs (`per_item_results.jsonl`, `debug_samples.jsonl`) remain in `results/` (gitignored) to keep the repository lightweight.
 
 ### 3. Check `summary.json` Format
 

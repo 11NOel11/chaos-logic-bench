@@ -61,14 +61,17 @@ htmlcov/
 # Documentation
 docs/_build/
 
-# Results and outputs (keep structure, ignore content)
-results/*
-!results/.gitkeep
+# Results and outputs
+# Raw/large outputs are NOT tracked - only published_results/ is committed
+results/
+results_raw/
 *.log
 
 # Checkpoints
 checkpoint.json
 *.ckpt
+per_item_results.jsonl
+debug_samples.jsonl
 
 # MacOS
 .DS_Store

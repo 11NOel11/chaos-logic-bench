@@ -3,10 +3,13 @@
 Aggregate results from multiple model evaluations into markdown tables.
 
 Usage:
-    python scripts/aggregate_results.py [output_file]
-    
-This script reads from results/{model}_{mode}/summary.json and generates
-a formatted markdown table suitable for README.md or RESULTS.md.
+    python scripts/aggregate_results.py [output_file] [--input-dir DIR]
+
+This script reads from published_results/{model}_{mode}/summary.json by default
+and generates a formatted markdown table suitable for README.md or RESULTS.md.
+
+Options:
+    --input-dir DIR   Read from DIR instead of published_results/ (e.g., results_raw/)
 
 If output_file is specified, writes to that file. Otherwise prints to stdout.
 """
@@ -17,7 +20,7 @@ from pathlib import Path
 from collections import defaultdict
 
 
-def discover_results(results_dir: str = "results") -> dict:
+def discover_results(results_dir: str = "published_results") -> dict:
     """
     Discover all available result directories and load summaries.
     
@@ -133,13 +136,29 @@ def format_markdown_table(results: dict) -> str:
 
 
 def main():
-    output_file = sys.argv[1] if len(sys.argv) > 1 else None
-    
-    print("Discovering results...", file=sys.stderr)
-    results = discover_results()
-    
+    # Parse arguments
+    input_dir = "published_results"
+    output_file = None
+
+    args = sys.argv[1:]
+    i = 0
+    while i < len(args):
+        if args[i] == "--input-dir":
+            if i + 1 < len(args):
+                input_dir = args[i + 1]
+                i += 2
+            else:
+                print("ERROR: --input-dir requires an argument", file=sys.stderr)
+                sys.exit(1)
+        else:
+            output_file = args[i]
+            i += 1
+
+    print(f"Discovering results in {input_dir}...", file=sys.stderr)
+    results = discover_results(input_dir)
+
     if not results:
-        print("No results found in results/ directory", file=sys.stderr)
+        print(f"No results found in {input_dir}/ directory", file=sys.stderr)
         sys.exit(1)
     
     print(f"Found {len(results)} result set(s)", file=sys.stderr)

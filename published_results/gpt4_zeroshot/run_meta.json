@@ -1,0 +1,10 @@
+{
+  "model_name": "gpt4",
+  "mode": "zeroshot",
+  "max_workers": 5,
+  "num_items_total": 621,
+  "num_items_evaluated": 620,
+  "num_items_unanswered": 0,
+  "num_items_no_gold": 1,
+  "timestamp": "2025-12-14T09:30:57.807209"
+}
