@@ -90,6 +90,10 @@ checkpoint.json
 README_OLD.md
 debug_*.jsonl
 
+# Audit and implementation reports (temporary)
+AUDIT_REPORT_*.md
+IMPLEMENTATION_SUMMARY_*.md
+
 # uv
 .uv/
-uv.lock
+# Note: uv.lock should be tracked for reproducibility

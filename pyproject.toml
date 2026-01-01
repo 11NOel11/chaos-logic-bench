@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-    {name = "ChaosBench Team"},
+    {name = "Noel Thomas", email = "noel.thomas@mbzuai.ac.ae"},
 ]
 keywords = ["llm", "benchmark", "dynamical-systems", "chaos-theory", "reasoning"]
 classifiers = [
@@ -32,15 +32,19 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/chaos-logic-bench"
-Repository = "https://github.com/yourusername/chaos-logic-bench"
+Homepage = "https://github.com/11NOel11/ChaosBench-Logic"
+Repository = "https://github.com/11NOel11/ChaosBench-Logic"
+Issues = "https://github.com/11NOel11/ChaosBench-Logic/issues"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+]
 
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
-
-[tool.uv]
-dev-dependencies = []
 
 [tool.setuptools]
 packages = ["."]

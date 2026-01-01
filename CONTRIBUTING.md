@@ -32,8 +32,8 @@ pip install uv
 ### 2. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/chaos-logic-bench.git
-cd chaos-logic-bench
+git clone https://github.com/11NOel11/ChaosBench-Logic.git
+cd ChaosBench-Logic
 ```
 
 ### 3. Setup Environment
@@ -92,8 +92,8 @@ python run_benchmark.py --model all --mode zeroshot
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/chaos-logic-bench.git
-cd chaos-logic-bench
+git clone https://github.com/11NOel11/ChaosBench-Logic.git
+cd ChaosBench-Logic
 
 # Create virtual environment
 python3 -m venv .venv
@@ -111,8 +111,8 @@ cp .env.example .env
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/chaos-logic-bench.git
-cd chaos-logic-bench
+git clone https://github.com/11NOel11/ChaosBench-Logic.git
+cd ChaosBench-Logic
 
 # Create conda environment
 conda create -n chaosbench python=3.11
@@ -130,8 +130,8 @@ cp .env.example .env
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/chaos-logic-bench.git
-cd chaos-logic-bench
+git clone https://github.com/11NOel11/ChaosBench-Logic.git
+cd ChaosBench-Logic
 
 # Install dependencies globally
 pip install -r requirements.txt
@@ -202,8 +202,8 @@ For comparison:
 1. **Fork the repository** on GitHub
 2. **Clone your fork**:
    ```bash
-   git clone https://github.com/your-username/chaos-logic-bench.git
-   cd chaos-logic-bench
+   git clone https://github.com/your-username/ChaosBench-Logic.git
+   cd ChaosBench-Logic
    ```
 3. **Create a feature branch**:
    ```bash
@@ -299,7 +299,7 @@ Found a bug? Have a feature request?
 ## Project Structure
 
 ```
-chaos-logic-bench/
+ChaosBench-Logic/
 ├── clients.py              # LLM API client implementations
 ├── eval_chaosbench.py      # Core evaluation framework
 ├── run_benchmark.py        # Main runner script

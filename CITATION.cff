@@ -4,12 +4,13 @@ type: software
 title: "ChaosBench-Logic: A Benchmark for Evaluating Large Language Models on Complex Reasoning about Dynamical Systems"
 version: 1.0.0
 date-released: 2024-12-24
-url: "https://github.com/11NOel11/chaos-logic-bench"
-repository-code: "https://github.com/11NOel11/chaos-logic-bench"
+url: "https://github.com/11NOel11/ChaosBench-Logic"
+repository-code: "https://github.com/11NOel11/ChaosBench-Logic"
 license: MIT
 authors:
-  - family-names: "ChaosBench Team"
-    affiliation: "Independent Researchers"
+  - family-names: "Thomas"
+    given-names: "Noel"
+    affiliation: "Mohamed bin Zayed University of Artificial Intelligence (MBZUAI)"
 keywords:
   - "large language models"
   - "benchmark"
@@ -36,7 +37,8 @@ abstract: >
 references:
   - type: article
     authors:
-      - family-names: "ChaosBench Team"
+      - family-names: "Thomas"
+        given-names: "Noel"
     title: "ChaosBench-Logic: Benchmarking Large Language Models on Complex Reasoning about Dynamical Systems"
     year: 2024
     journal: "arXiv preprint"

@@ -5,11 +5,12 @@
 ### A Benchmark for Evaluating Large Language Models on Complex Reasoning about Dynamical Systems
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![arXiv](https://img.shields.io/badge/arXiv-2024.xxxxx-b31b1b.svg)](https://arxiv.org/)
-[![GitHub Stars](https://img.shields.io/github/stars/11NOel11/chaos-logic-bench?style=social)](https://github.com/11NOel11/chaos-logic-bench)
+[![Code License: MIT](https://img.shields.io/badge/Code%20License-MIT-yellow.svg)](LICENSE)
+[![Data License: CC BY 4.0](https://img.shields.io/badge/Data%20License-CC%20BY%204.0-blue.svg)](LICENSE_DATA)
+[![Tests](https://github.com/11NOel11/ChaosBench-Logic/actions/workflows/ci.yml/badge.svg)](https://github.com/11NOel11/ChaosBench-Logic/actions)
+[![GitHub Stars](https://img.shields.io/github/stars/11NOel11/ChaosBench-Logic?style=social)](https://github.com/11NOel11/ChaosBench-Logic)
 
-[**Paper**](https://arxiv.org/) | [**Dataset**](data/) | [**Results**](RESULTS.md) | [**Documentation**](API_SETUP.md)
+[**Dataset Card**](DATASET.md) | [**Ontology**](ONTOLOGY.md) | [**Results**](RESULTS.md) | [**API Setup**](API_SETUP.md) | [**Contributing**](CONTRIBUTING.md)
 
 </div>
 
@@ -23,14 +24,36 @@ Our findings reveal that while modern LLMs achieve impressive accuracy (up to 91
 
 ---
 
+## 📊 Dataset Statistics
+
+<div align="center">
+
+| Metric | Count | Details |
+|--------|-------|---------|
+| **Total Questions** | 621 | Unique IDs: q0001 to q0621 |
+| **Task Types** | 17 | Atomic, multi-hop, counterfactual, multi-turn, bias, cross-system, etc. |
+| **Systems Used** | 27 | Chaotic, periodic, quasi-periodic, and stochastic systems |
+| **Systems Defined** | 30 | 3 additional systems available for extension |
+| **Multi-turn Dialogues** | 49 | Average 4.1 turns per dialogue (3-6 turns) |
+| **Predicates per System** | 11 | Chaotic, Deterministic, Periodic, StrangeAttr, PosLyap, etc. |
+| **Ground Truth Labels** | YES/NO, TRUE/FALSE | Plus special DISAPPEAR label for counterfactuals |
+
+</div>
+
+**Note:** 27 systems are actively used in the dataset; 3 systems (Chua circuit, damped oscillator, double pendulum) are defined but reserved for future batches.
+
+See [**DATASET.md**](DATASET.md) for complete schema documentation and [**ONTOLOGY.md**](ONTOLOGY.md) for predicate definitions and FOL axioms.
+
+---
+
 ## 🎯 Key Features
 
 <div align="center">
 
 | Feature | Description |
 |---------|-------------|
-| **📊 621 Questions** | Spanning 7 difficulty levels from atomic facts to counterfactual reasoning |
-| **🔬 30 Systems** | Lorenz-63, double pendulum, Brusselator, FitzHugh-Nagumo, logistic map, and more |
+| **📊 621 Questions** | 17 task types across 7 high-level categories of reasoning complexity |
+| **🔬 27 Systems** | Lorenz-63, Brusselator, FitzHugh-Nagumo, logistic map, and more (30 defined) |
 | **🧠 6 LLMs** | GPT-4, Claude-3.5, Gemini-2.5, LLaMA-3 70B, Mixtral, OpenHermes |
 | **🎲 11 Predicates** | Stability, chaos, bifurcations, periodicity, sensitivity, and more |
 | **🔄 2 Modes** | Zero-shot and chain-of-thought reasoning |
@@ -82,13 +105,17 @@ We recommend using **[uv](https://docs.astral.sh/uv/)** (a fast Rust-based Pytho
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Clone repository
-git clone https://github.com/11NOel11/chaos-logic-bench.git
-cd chaos-logic-bench
+git clone https://github.com/11NOel11/ChaosBench-Logic.git
+cd ChaosBench-Logic
 
-# Setup environment
+# Setup environment with uv (creates virtualenv and installs dependencies)
 uv venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 uv pip install -e .
+
+# Install dev dependencies (pytest, etc.)
+uv pip install -r requirements.txt
+uv pip install --group dev
 ```
 
 <details>
@@ -220,7 +247,7 @@ All tests use **synthetic data** and do not require API keys or external network
 ## 📂 Repository Structure
 
 ```
-chaos-logic-bench/
+ChaosBench-Logic/
 ├── 📄 run_benchmark.py        # Main evaluation runner
 ├── 📄 eval_chaosbench.py      # Core evaluation framework
 ├── 📄 clients.py              # LLM API client implementations
@@ -314,19 +341,21 @@ Results are exported in **JSON**, **CSV**, and **PNG** formats for downstream an
 
 ---
 
-## 📝 Citation
+## 📝 How to Cite
 
 If you use ChaosBench-Logic in your research, please cite:
 
 ```bibtex
-@article{chaosbench2024,
-  title={ChaosBench-Logic: Benchmarking Large Language Models on Complex Reasoning about Dynamical Systems},
-  author={ChaosBench Team},
-  journal={arXiv preprint arXiv:2024.xxxxx},
+@software{chaosbench2024,
+  title={ChaosBench-Logic: A Benchmark for Evaluating Large Language Models on Complex Reasoning about Dynamical Systems},
+  author={Thomas, Noel},
   year={2024},
-  url={https://github.com/11NOel11/chaos-logic-bench}
+  url={https://github.com/11NOel11/ChaosBench-Logic},
+  institution={Mohamed bin Zayed University of Artificial Intelligence}
 }
 ```
+
+You can also use the [CITATION.cff](CITATION.cff) file for automatic citation generation in GitHub.
 
 ---
 
@@ -350,10 +379,13 @@ See [**CONTRIBUTING.md**](CONTRIBUTING.md) for detailed guidelines on:
 
 ## 📚 Documentation
 
-- **[API_SETUP.md](API_SETUP.md)** - Comprehensive guide for obtaining and configuring API keys
-- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Development setup and contribution guidelines  
+- **[DATASET.md](DATASET.md)** - Complete dataset card with schema, statistics, and construction methodology
+- **[ONTOLOGY.md](ONTOLOGY.md)** - Predicate definitions and first-order logic axioms
 - **[RESULTS.md](RESULTS.md)** - Complete evaluation results with detailed analysis
-- **[LICENSE](LICENSE)** - MIT License
+- **[API_SETUP.md](API_SETUP.md)** - Comprehensive guide for obtaining and configuring API keys
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Development setup and contribution guidelines
+- **[LICENSE](LICENSE)** - MIT License (code)
+- **[LICENSE_DATA](LICENSE_DATA)** - CC BY 4.0 (dataset)
 
 ---
 
@@ -393,9 +425,11 @@ Reinstall: `pip install -r requirements.txt` or `uv pip install -e .`
 
 ## 📄 License
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+**Code:** This project's code is licensed under the [MIT License](LICENSE) - free for academic and commercial use with attribution.
 
-Free for academic and commercial use with attribution.
+**Dataset:** The benchmark dataset (data/ and systems/ directories) is licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE_DATA). You are free to share and adapt the data with proper attribution.
+
+When using this benchmark, please cite using the format in the [How to Cite](#-how-to-cite) section above.
 
 ---
 
@@ -414,8 +448,8 @@ Special thanks to the open-source community for tools and libraries that made th
 
 ### 🌟 Star us on GitHub if you find this useful!
 
-**Maintained by the ChaosBench Team**
+**Author:** Noel Thomas (Mohamed bin Zayed University of Artificial Intelligence)
 
-[Report Bug](https://github.com/11NOel11/chaos-logic-bench/issues) · [Request Feature](https://github.com/11NOel11/chaos-logic-bench/issues) · [Discussions](https://github.com/11NOel11/chaos-logic-bench/discussions)
+[Report Bug](https://github.com/11NOel11/ChaosBench-Logic/issues) · [Request Feature](https://github.com/11NOel11/ChaosBench-Logic/issues) · [Discussions](https://github.com/11NOel11/ChaosBench-Logic/discussions)
 
 </div>

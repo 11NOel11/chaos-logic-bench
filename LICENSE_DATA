@@ -1,0 +1,62 @@
+Creative Commons Attribution 4.0 International License (CC BY 4.0)
+
+Copyright (c) 2025 Noel Thomas (Mohamed bin Zayed University of Artificial Intelligence)
+
+This work is licensed under the Creative Commons Attribution 4.0 International License.
+
+You are free to:
+
+  * Share — copy and redistribute the material in any medium or format
+  * Adapt — remix, transform, and build upon the material for any purpose, even commercially
+
+Under the following terms:
+
+  * Attribution — You must give appropriate credit, provide a link to the license, and indicate
+    if changes were made. You may do so in any reasonable manner, but not in any way that suggests
+    the licensor endorses you or your use.
+  * No additional restrictions — You may not apply legal terms or technological measures that
+    legally restrict others from doing anything the license permits.
+
+Notices:
+
+  * You do not have to comply with the license for elements of the material in the public domain
+    or where your use is permitted by an applicable exception or limitation.
+  * No warranties are given. The license may not give you all of the permissions necessary for
+    your intended use. For example, other rights such as publicity, privacy, or moral rights may
+    limit how you use the material.
+
+Full license text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+---
+
+DATASET COMPONENTS:
+
+This license applies to all dataset files in the data/ directory:
+  - batch1_atomic_implication.jsonl
+  - batch2_multiHop_crossSystem.jsonl
+  - batch3_pde_chem_bio.jsonl
+  - batch4_maps_advanced.jsonl
+  - batch5_counterfactual_high_difficulty.jsonl
+  - batch6_deep_bias_probes.jsonl
+  - batch7_multiturn_advanced.jsonl
+
+And system definitions in the systems/ directory (30 JSON files).
+
+Total: 621 questions across 30 dynamical systems.
+
+---
+
+CITATION:
+
+When using this dataset in your research, please cite:
+
+  Thomas, N. (2024). ChaosBench-Logic: A Benchmark for Evaluating Large Language Models on
+  Complex Reasoning about Dynamical Systems. https://github.com/11NOel11/ChaosBench-Logic
+
+BibTeX:
+  @software{chaosbench2024,
+    title={ChaosBench-Logic: A Benchmark for Evaluating Large Language Models on Complex Reasoning about Dynamical Systems},
+    author={Thomas, Noel},
+    year={2024},
+    url={https://github.com/11NOel11/ChaosBench-Logic}
+  }
