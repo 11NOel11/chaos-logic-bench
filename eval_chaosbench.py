@@ -214,7 +214,7 @@ def normalize_label(text: Optional[str]) -> Optional[str]:
         # Step 2: Try multiple answer extraction patterns
         answer_patterns = [
             r'(?:final|ultimate|my)\s+answer\s*[:=]?\s*([^\n.,;]+)',
-            r'(?:the\s+)?answer\s+is\s+([^\n.,;]+)',
+            r'(?:the\s+)?answer\s+is\s+(.+?)(?:\.|\n|$)',  # Changed: allow commas for revision patterns
             r'(?:i\s+)?answer\s*[:=]\s*([^\n.,;]+)',
             r'therefore\s*[,:=]?\s*([^\n.,;]+)',
             r'conclusion\s*[:=]\s*([^\n.,;]+)',
@@ -265,15 +265,10 @@ def normalize_label(text: Optional[str]) -> Optional[str]:
     if not tokens:
         return None
 
-    # Check first token (most common case)
-    first_token = tokens[0]
-    if first_token in YES_SET:
-        return "YES"
-    if first_token in NO_SET:
-        return "NO"
-
     # Check if YES/TRUE/NO/FALSE appears as any standalone token
-    # Iterate in REVERSE to find LAST occurrence (important for CoT)
+    # Iterate to find LAST occurrence (important for CoT revision patterns)
+    # Note: We check LAST occurrence rather than first to handle cases like:
+    # "The answer is YES initially, but actually NO" -> should return NO
     last_yes_token = None
     last_no_token = None
     for i, token in enumerate(tokens):

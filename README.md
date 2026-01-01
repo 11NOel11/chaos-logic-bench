@@ -84,7 +84,7 @@ See [**DATASET.md**](docs/DATASET.md) for complete schema documentation and [**O
 - 🏆 **GPT-4 Zero-shot** achieves highest overall accuracy (94.0%)
 - 💬 **LLaMA-3 70B Zero-shot** shows best dialogue consistency (75.5%)
 - 🎯 Multiple models achieve >91% accuracy, demonstrating strong logical reasoning capabilities
-- ⚠️ Chain-of-thought prompting shows mixed results (improved for LLaMA-3, degraded for GPT-4)
+- ⚠️ Chain-of-thought prompting shows mixed results (degraded for both GPT-4 and LLaMA-3)
 
 > **Note:** Throughput and timing metrics are environment-dependent and not reported. Worker counts varied by model (2-8 workers). See `results/*/run_meta.json` for deployment configuration details.
 
@@ -337,7 +337,7 @@ Each run generates comprehensive analytics:
 - 💬 **Dialogue Accuracy** - Multi-turn conversation consistency
 - 📊 **Task-specific Accuracy** - Per-category performance breakdowns
 - ⚖️ **Bias Analysis** - Response distribution patterns
-- ⏱️ **Execution Metrics** - Throughput, latency, API success rates
+- 🔧 **Execution Metadata** - Worker configuration, coverage, API success rates
 - 📈 **Visual Analytics** - Heatmaps, error distributions, confusion matrices
 
 Results are exported in **JSON**, **CSV**, and **PNG** formats for downstream analysis.
@@ -448,7 +448,7 @@ Yes! See [docs/CONTRIBUTING.md#adding-new-models](docs/CONTRIBUTING.md#adding-ne
 <details>
 <summary><b>Missing dependencies?</b></summary>
 
-Reinstall: `pip install -r requirements.txt` or `uv pip install -e .`
+Reinstall: `pip install -r requirements.txt` or `uv sync --all-groups`
 </details>
 
 ---

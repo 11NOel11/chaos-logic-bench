@@ -105,20 +105,15 @@ class TestRevisionPatterns:
         text = "One might think yes at first, but the correct answer is no."
         assert normalize_label(text) == "NO"
 
-    @pytest.mark.xfail(reason="Known limitation: artificial edge case unlikely in real CoT")
     def test_artificial_edge_case(self):
         """
-        Known limitation: This specific phrasing is handled incorrectly.
+        Test revision pattern with explicit 'answer is' structure.
 
-        The issue is that tokenization and pattern matching can't perfectly
-        distinguish this from legitimate revision patterns. This is acceptable
-        because:
-        1. This exact phrasing is rare in real CoT outputs
-        2. More natural phrasings work correctly
-        3. Trade-off for robust handling of common patterns
+        Fixed: Changed normalize_label to check LAST occurrence of YES/NO
+        instead of first occurrence, which correctly handles revision patterns
+        like "YES initially, but actually NO".
         """
         text = "The answer is YES initially, but actually NO."
-        # Currently returns YES, should return NO
         assert normalize_label(text) == "NO"
 
 
