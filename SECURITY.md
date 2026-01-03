@@ -6,8 +6,8 @@ We take security seriously. If you discover a security vulnerability in ChaosBen
 
 ### How to Report
 
-**Preferred Method:** Email the maintainer directly at:
-- **Email:** Please create a GitHub Security Advisory at https://github.com/11NOel11/ChaosBench-Logic/security/advisories/new
+**Preferred Method:** Create a GitHub Security Advisory at:
+- https://github.com/11NOel11/ChaosBench-Logic/security/advisories/new
 
 **What to Include:**
 - Description of the vulnerability
