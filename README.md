@@ -80,6 +80,8 @@ See [**DATASET.md**](docs/DATASET.md) for complete schema documentation and [**O
 
 </div>
 
+> **Coverage Note:** 620/621 indicates 1 dataset item lacks a ground truth label and is excluded from accuracy calculations. See `published_results/*/run_meta.json` (`num_items_no_gold: 1`) for details.
+
 **Key Findings:**
 - 🏆 **GPT-4 Zero-shot** achieves highest overall accuracy (94.0%)
 - 💬 **LLaMA-3 70B Zero-shot** shows best dialogue consistency (75.5%)
@@ -167,7 +169,7 @@ python run_benchmark.py --model llama3 --mode zeroshot --workers 2
 
 ## 🧪 Testing & Quality Assurance
 
-ChaosBench-Logic includes a comprehensive pytest test suite with **122 test cases** ensuring correctness of evaluation logic, FOL violation detection, and answer normalization.
+ChaosBench-Logic includes a comprehensive pytest test suite ensuring correctness of evaluation logic, FOL violation detection, and answer normalization.
 
 ### Running Tests
 
@@ -194,13 +196,12 @@ uv run pytest --cov=eval_chaosbench --cov-report=html
 
 <div align="center">
 
-| Test Suite | Test Cases | Coverage |
-|------------|:----------:|----------|
-| **Answer Normalization** | 48 | 8-step CoT parsing cascade, TRUE/FALSE variants, edge cases |
-| **FOL Rules & Ontology** | 46 | Axiom definitions, system loading, predicate extraction, violation detection |
-| **Summary Metrics** | 21 | Accuracy, dialogue metrics, contradiction rate, FOL violations, bias error |
-| **Integration Smoke Tests** | 7 | End-to-end evaluation flow, metric aggregation |
-| **Total** | **122** | Comprehensive coverage of core evaluation logic |
+| Test Suite | Coverage |
+|------------|----------|
+| **Answer Normalization** | 8-step CoT parsing cascade, TRUE/FALSE variants, edge cases |
+| **FOL Rules & Ontology** | Axiom definitions, system loading, predicate extraction, violation detection |
+| **Summary Metrics** | Accuracy, dialogue metrics, contradiction rate, FOL violations, bias error |
+| **Integration Smoke Tests** | End-to-end evaluation flow, metric aggregation |
 
 </div>
 
@@ -224,7 +225,7 @@ The `normalize_label()` function uses an 8-step cascade to robustly extract YES/
 - TRUE/FALSE variants
 - Markdown formatting
 
-See `tests/test_normalization.py` for 48 test cases documenting all supported formats.
+See `tests/test_normalization.py` for comprehensive test cases documenting all supported formats.
 
 **3. Bug Fixes**
 
@@ -236,10 +237,10 @@ See `tests/test_normalization.py` for 48 test cases documenting all supported fo
 ```
 tests/
 ├── __init__.py                    # Test suite documentation
-├── test_normalization.py          # Answer extraction (48 tests)
-├── test_fol_rules.py              # FOL logic (46 tests)
-├── test_summary_metrics.py        # Metric computation (21 tests)
-└── test_integration_smoke.py      # Integration tests (7 tests)
+├── test_normalization.py          # Answer extraction tests
+├── test_fol_rules.py              # FOL logic tests
+├── test_summary_metrics.py        # Metric computation tests
+└── test_integration_smoke.py      # Integration tests
 ```
 
 All tests use **synthetic data** and do not require API keys or external network access.
@@ -265,11 +266,11 @@ ChaosBench-Logic/
 │   ├── lorenz63.json, rossler.json, double_pendulum.json
 │   ├── brusselator.json, fitzhugh_nagumo.json, ...
 │   └── [27 more systems]
-├── 📁 tests/                  # Pytest test suite (122 test cases)
-│   ├── test_normalization.py  # Answer extraction tests (48)
-│   ├── test_fol_rules.py      # FOL violation tests (46)
-│   ├── test_summary_metrics.py # Metrics computation tests (21)
-│   └── test_integration_smoke.py # Integration tests (7)
+├── 📁 tests/                  # Pytest test suite
+│   ├── test_normalization.py  # Answer extraction tests
+│   ├── test_fol_rules.py      # FOL violation tests
+│   ├── test_summary_metrics.py # Metrics computation tests
+│   └── test_integration_smoke.py # Integration tests
 ├── 📁 published_results/      # Published evaluation artifacts (tracked)
 ├── 📁 docs/                   # Documentation
 │   ├── DATASET.md             # Dataset card and schema
